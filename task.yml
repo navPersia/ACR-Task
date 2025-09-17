@@ -2,6 +2,6 @@
 version: v1.1.0
 steps:
   # Run a container and execute your script from the uploaded context
-  - cmd: mcr.microsoft.com/powershell:latest -File https://github.com/navPersia/ACR-Task.git
+  - cmd: mcr.microsoft.com/powershell:latest pwsh -NoLogo -NoProfile -NonInteractive -File /workspace/purge-images.ps1
     pull: true
     workingDirectory: /workspace    # /workspace = where ACR mounts your --context
