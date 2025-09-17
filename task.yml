@@ -1,0 +1,7 @@
+# task.yml
+version: v1.1.0
+steps:
+  # Run a container and execute your script from the uploaded context
+  - cmd: mcr.microsoft.com/powershell:latest -File /workspace/purge-images.ps1
+    pull: true
+    workingDirectory: /workspace    # /workspace = where ACR mounts your --context
