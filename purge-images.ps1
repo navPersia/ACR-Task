@@ -1,12 +1,23 @@
+#!/usr/bin/env pwsh
+
+$ErrorActionPreference = 'Stop'
+
 # --- configure ---
 $acrName = "acrsharedservicesdev"                 # e.g. myregistry
 $acrFqdn = "$($acrName).azurecr.io"
 
 $aksName = "aks-sharedservices-dev-01"
 $aksResourceGroup = "rg-sharedservices-dev-01"
-# ToDo: login on az cli
-az login
+
+Write-Host "[INFO] az version:"; try { az version | Out-Null; Write-Host "  OK" } catch { Write-Host "  az not found"; throw }
+Write-Host "[INFO] kubectl version (client):"; try { kubectl version --client --output=yaml | Out-Null; Write-Host "  OK" } catch { Write-Host "  kubectl not found"; throw }
+
+# ToDo: login on az cli using system managed identity
+az login --identity
+
+# Get AKS credentials. Use --admin if your MI/SP lacks cluster user role.
 az aks get-credentials --overwrite-existing --name $aksName --resource-group $aksResourceGroup
+
 # ToDo: get k8s pairs
 $k8sPairs = kubectl get pods -A -o json |
   ConvertFrom-Json |
