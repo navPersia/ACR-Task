@@ -1,7 +1,8 @@
-# task.yml
 version: v1.1.0
 steps:
-  # Run a container and execute your script from the uploaded context
-  - cmd: mcr.microsoft.com/powershell:latest pwsh -NoLogo -NoProfile -NonInteractive -File /workspace/purge-images.ps1
-    pull: true
-    workingDirectory: /workspace    # /workspace = where ACR mounts your --context
+  - build: -t pwsh-purge-task:latest .
+    workingDirectory: /workspace
+  # Run the script using the built image (CMD runs purge-images.ps1)
+  - cmd: pwsh-purge-task:latest
+    pull: false
+  # /workspace = where ACR mounts your --context
