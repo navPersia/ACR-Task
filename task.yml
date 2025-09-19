@@ -8,3 +8,8 @@ steps:
     workingDirectory: /workspace
   - cmd: pwsh-purge-task:latest
     pull: false
+    env:
+      - "ACR_NAME={{.Values.ACR_NAME}}"
+      - "AKS_NAME={{.Values.AKS_NAME}}"
+      - "AKS_RESOURCE_GROUP={{.Values.AKS_RESOURCE_GROUP}}"
+
