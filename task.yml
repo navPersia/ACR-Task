@@ -1,8 +1,8 @@
 version: v1.1.0
 env:
-  - ACR_NAME: acrsharedservicesdev
-  - AKS_NAME: aks-sharedservices-dev-01
-  - AKS_RESOURCE_GROUP: rg-sharedservices-dev-01
+  ACR_NAME=acrsharedservicesdev
+  AKS_NAME=aks-sharedservices-dev-01
+  AKS_RESOURCE_GROUP=rg-sharedservices-dev-01
 steps:
   - build: -t pwsh-purge-task:latest .
     workingDirectory: /workspace
