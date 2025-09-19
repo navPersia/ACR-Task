@@ -1,9 +1,9 @@
 # --- configure ---
-$acrName = "acrsharedservicesdev"                 # e.g. myregistry
+$acrName = $env:ACR_NAME                 # e.g. myregistry
 $acrFqdn = "$($acrName).azurecr.io"
 
-$aksName = "aks-sharedservices-dev-01"
-$aksResourceGroup = "rg-sharedservices-dev-01"
+$aksName = $env:AKS_NAME
+$aksResourceGroup = $env:AKS_RESOURCE_GROUP
 
 # ToDo: login on az cli
 # ToDo: login on az cli using system managed identity
@@ -87,7 +87,7 @@ $unusedTags = $unusedTags | Where-Object { $_ -ne "pwsh-purge-task:latest" }
 # log the unusedTags
 $unusedTags | Format-Table -AutoSize
 
-# # ToDo: delelte the unusedTags from the acr
+# ToDo: delelte the unusedTags from the acr
 foreach ($unusedTag in $unusedTags) {
     az acr repository delete --name $acrName --image $unusedTag --yes
     Write-Host "Deleted $unusedTag"
