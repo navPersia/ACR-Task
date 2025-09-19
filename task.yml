@@ -1,8 +1,10 @@
 version: v1.1.0
+env:
+  ACR_NAME: acrsharedservicesdev
+  AKS_NAME: aks-sharedservices-dev-01
+  AKS_RESOURCE_GROUP: rg-sharedservices-dev-01
 steps:
   - build: -t pwsh-purge-task:latest .
     workingDirectory: /workspace
-  # Run the script using the built image (CMD runs purge-images.ps1)
   - cmd: pwsh-purge-task:latest
     pull: false
-  # /workspace = where ACR mounts your --context
