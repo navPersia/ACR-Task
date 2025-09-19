@@ -4,9 +4,8 @@ $acrFqdn = "$($acrName).azurecr.io"
 
 $aksName = "aks-sharedservices-dev-01"
 $aksResourceGroup = "rg-sharedservices-dev-01"
-# ToDo: login on az cli
-# ToDo: login on az cli using system managed identity
-az login --identity
+
+az login --identity --subscription "sharedservices-dev"
 
 # Get AKS credentials. Use --admin if your MI/SP lacks cluster user role powershell
 az aks get-credentials --overwrite-existing --name $aksName --resource-group $aksResourceGroup
