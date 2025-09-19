@@ -36,3 +36,46 @@ $k8sPairs = kubectl get pods -A -o json |
   Sort-Object -Unique
 
 $k8sPairs | Format-Table -AutoSize
+
+
+$allTop4Tags = @() # Top4 tags
+$allTags = @() # All tags
+$acrImages = az acr repository list --name $acrName --output tsv
+foreach ($repo in $acrImages) {
+    $top4 = az acr repository show-tags --name $acrName --repository $repo --orderby time_asc --top 4 --output tsv
+    $all = az acr repository show-tags --name $acrName --repository $repo --output tsv
+    foreach ($tag in $top4) {
+        $allTop4Tags += "$($repo):$($tag)"
+    }
+    foreach ($tag in $all) {
+        $allTags += "$($repo):$($tag)"
+    }
+}
+
+# get all the repos in the $k8sPairs
+$k8sPairsRepos = $k8sPairs | ForEach-Object {
+    $repo = $_
+    $repo = $repo.Split(":")[0]
+    $repo
+}
+
+# for each tagsInAcr, check if the tag is in the k8sPairs
+$allTop3Tags = @()
+foreach ($tag in $allTop4Tags) {
+    if ($tag.Split(":")[0] -in $k8sPairsRepos) {
+        if ($tag -notin $k8sPairs) {
+            $allTop3Tags += $tag
+        }
+    }
+}
+
+$unusedTags = @()
+foreach ($tag in $allTags) {
+    if ($tag -notin $allTop3Tags -and $tag -notin $k8sPairs) {
+        $unusedTags += $tag
+    }
+}
+#remove image name pwsh-purge-task from the unusedTags
+$unusedTags = $unusedTags | Where-Object { $_ -ne "pwsh-purge-task:latest" }
+# log the unusedTags
+$unusedTags | Format-Table -AutoSize
