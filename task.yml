@@ -3,11 +3,10 @@ values:
   ACR_NAME: "acrsharedservicesdev"
   AKS_NAME: "aks-sharedservices-dev-01"
   AKS_RESOURCE_GROUP: "rg-sharedservices-dev-01"
+  ACRT_NAME: "acrsharedservicesdev"
 steps:
-  - build: -t pwsh-purge-task:latest .
-    workingDirectory: /workspace
-  - cmd: pwsh-purge-task:latest
-    pull: false
+  - cmd: {{.Values.ACRT_NAME}}.azurecr.io/pwsh-purge-task:latest
+    pull: true
     env:
       - "ACR_NAME={{.Values.ACR_NAME}}"
       - "AKS_NAME={{.Values.AKS_NAME}}"
